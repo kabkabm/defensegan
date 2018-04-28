@@ -1,0 +1,10 @@
+DATASET_NAME: 'celeba'
+ARCH_TYPE: 'celeba'
+MODE: 'wgan-gp'
+CRITIC_ITERS: 5
+REC_ITERS: 200
+REC_LR: 10.0
+REC_RR: 2
+IMAGE_DIM: [64,64,3]
+ATTRIBUTE: gender
+NET_DIM: 64
