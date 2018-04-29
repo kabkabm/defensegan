@@ -18,8 +18,8 @@ TODO: put a the method overview figures of the paper.
 ### Installation
 1. Clone this repository:
 ```
-git clone --recursive https://github.com/kabkabm/defense-gan
-cd defense-gan
+git clone --recursive https://github.com/kabkabm/defensegan
+cd defensegan
 git submodule update --init --recursive
 ```
 
