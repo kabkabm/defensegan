@@ -13,7 +13,8 @@ Pouya Samangouei*, Maya Kabkab*, Rama Chellappa
 }
 ```
 
-TODO: put a the method overview figures of the paper.
+![alt text](figures/defensegan.png "The Overview of the Defense-GAN Algorithm")
+![alt text](figures/defensegan_gd.png "The gradient descent steps at inferece time.")
 
 ### Installation
 1. Clone this repository:
