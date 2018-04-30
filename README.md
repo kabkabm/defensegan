@@ -194,7 +194,7 @@ python whitebox.py --cfg <path> \
        --defense_type defense_gan \
        --model A
 ```
-    - If you want to see how the scripts work quickly add the following flags too:
+- If you want to see how the scripts work quickly add the following flags too:
 ```
 --nb_epochs 1 --num_tests 400
 ```
