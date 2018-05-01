@@ -1,4 +1,4 @@
-# Copyright 2018 The DefenseGAN Authors. All Rights Reserved.
+# Copyright 2018 The Defense-GAN Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
 # limitations under the License.
 # ==============================================================================
 
-"""Testing blackbox DefenseGAN models. This module is based on MNIST tutorial
+"""Testing blackbox Defense-GAN models. This module is based on MNIST tutorial
 of cleverhans."""
 
 from __future__ import absolute_import
@@ -57,7 +57,7 @@ dataset_gan_dict = {
 }
 
 # orig_ refers to original images and not reconstructed ones.
-# To prepare these cache files run "python main.py --save_ds"
+# To prepare these cache files run "python main.py --save_ds".
 orig_data_path = {k: 'data/cache/{}_pkl'.format(k) for k in
                   dataset_gan_dict.keys()}
 
@@ -70,8 +70,8 @@ def prep_bbox(sess, images, labels, images_train, labels_train, images_test,
     
     Args:
         sess: the TF session
-        images: the input placeholder for MNIST
-        labels: the ouput placeholder for MNIST
+        images: the input placeholder
+        labels: the ouput placeholder
         images_train: the training data for the oracle
         labels_train: the training labels for the oracle
         images_test: the testing data for the oracle
@@ -87,7 +87,7 @@ def prep_bbox(sess, images, labels, images_train, labels_train, images_test,
         accuracy: Accuracy of the model.
     """
 
-    # Define TF model graph (for the black-box model)
+    # Define TF model graph (for the black-box model).
     model = cnn_arch
     if gan:
         x_rec = tf.stop_gradient(
@@ -124,7 +124,7 @@ def prep_bbox(sess, images, labels, images_train, labels_train, images_test,
         init_all=False, feed={K.learning_phase(): 1}
     )
 
-    # Print out the accuracy on legitimate data
+    # Print out the accuracy on legitimate test data.
     eval_params = {'batch_size': batch_size}
 
     accuracy = model_eval(
@@ -165,15 +165,15 @@ def train_sub(sess, x, y, bbox_preds, X_sub, Y_sub, nb_classes,
         model_sub: The substitute model function.
         preds_sub: The substitute prediction tensor.
     """
-    # Define TF model graph (for the black-box model)
+    # Define TF model graph (for the black-box model).
     model_sub = substitute_model
     preds_sub = model_sub(x)
     print("Defined TensorFlow model graph for the substitute.")
 
-    # Define the Jacobian symbolically using TensorFlow
+    # Define the Jacobian symbolically using TensorFlow.
     grads = jacobian_graph(preds_sub, x, nb_classes)
 
-    # Train the substitute and augment dataset alternatively
+    # Train the substitute and augment dataset alternatively.
     for rho in xrange(data_aug):
         print("Substitute training epoch #" + str(rho))
         train_params = {
@@ -185,21 +185,21 @@ def train_sub(sess, x, y, bbox_preds, X_sub, Y_sub, nb_classes,
                     init_all=False, args=train_params,
                     rng=rng, feed={K.learning_phase(): 1})
 
-        # If we are not at last substitute training iteration, augment dataset
+        # If we are not at last substitute training iteration, augment dataset.
         if rho < data_aug - 1:
 
             print("Augmenting substitute training data.")
-            # Perform the Jacobian augmentation
+            # Perform the Jacobian augmentation.
             X_sub = jacobian_augmentation(sess, x, X_sub, Y_sub, grads, lmbda,
                                           feed={K.learning_phase(): 0})
 
             print("Labeling substitute training data.")
-            # Label the newly generated synthetic points using the black-box
+            # Label the newly generated synthetic points using the black-box.
             Y_sub = np.hstack([Y_sub, Y_sub])
             X_sub_prev = X_sub[int(len(X_sub) / 2):]
             eval_params = {'batch_size': batch_size}
 
-            # To initialize the local variables of DefenseGAN.
+            # To initialize the local variables of Defense-GAN.
             sess.run(tf.local_variables_initializer())
 
             bbox_val = batch_eval(sess, [x], [bbox_preds], [X_sub_prev],
@@ -207,7 +207,7 @@ def train_sub(sess, x, y, bbox_preds, X_sub, Y_sub, nb_classes,
                                   feed={K.learning_phase(): 0})[0]
             # Note here that we take the argmax because the adversary
             # only has access to the label (not the probabilities) output
-            # by the black-box model
+            # by the black-box model.
             Y_sub[int(len(X_sub) / 2):] = np.argmax(bbox_val, axis=1)
 
     return model_sub, preds_sub
@@ -371,9 +371,10 @@ def blackbox(gan, rec_data_path=None, batch_size=128,
              learning_rate=0.001, nb_epochs=10, holdout=150, data_aug=6,
              nb_epochs_s=10, lmbda=0.1, online_training=False,
              train_on_recs=False, test_on_dev=True,
-             defense_type='gan'):
-    """
-    MNIST tutorial for the black-box attack from arxiv.org/abs/1602.02697
+             defense_type='none'):
+    """MNIST tutorial for the black-box attack from arxiv.org/abs/1602.02697
+    
+    Args:
         train_start: index of first training set example
         train_end: index of last training set example
         test_start: index of first test set example
@@ -381,7 +382,7 @@ def blackbox(gan, rec_data_path=None, batch_size=128,
         defense_type: Type of defense against blackbox attacks
     
     Returns:
- a dictionary with:
+        a dictionary with:
              * black-box model accuracy on test set
              * substitute model accuracy on test set
              * black-box model accuracy on adversarial examples transferred
@@ -389,13 +390,13 @@ def blackbox(gan, rec_data_path=None, batch_size=128,
     """
     FLAGS = flags.FLAGS
 
-    # Set logging level to see debug information
+    # Set logging level to see debug information.
     set_log_level(logging.WARNING)
 
-    # Dictionary used to keep track and return key accuracies
+    # Dictionary used to keep track and return key accuracies.
     accuracies = {}
 
-    # Create TF session
+    # Create TF session.
     adv_training = False
     if defense_type:
         if defense_type == 'defense_gan' and gan:
@@ -471,7 +472,7 @@ def blackbox(gan, rec_data_path=None, batch_size=128,
 
     if defense_type:
         if 'gan' in defense_type:
-            # Load cached dataset reconstructions
+            # Load cached dataset reconstructions.
             if online_training and not train_on_recs:
                 cur_gan = gan
             elif not online_training and rec_data_path:
@@ -528,7 +529,7 @@ def blackbox(gan, rec_data_path=None, batch_size=128,
 
     fgsm = FastGradientMethod(model_sub, sess=sess)
 
-    # Craft adversarial examples using the substitute
+    # Craft adversarial examples using the substitute.
     eval_params = {'batch_size': batch_size}
     x_adv_sub = fgsm.generate(images_tensor, **fgsm_par)
 
@@ -714,21 +715,21 @@ if __name__ == '__main__':
     args = parse_args()
 
     # Note: The load_config() call will convert all the parameters that are defined in
-    # experiments/config files into FLAGS.param_name and can be passed in from command line
+    # experiments/config files into FLAGS.param_name and can be passed in from command line.
     # arguments : python blackbox.py --cfg <config_path> --<param_name> <param_value>
     cfg = load_config(args.cfg)
     flags = tf.app.flags
 
     flags.DEFINE_integer('nb_classes', 10, 'Number of classes.')
     flags.DEFINE_float('learning_rate', 0.001, 'Learning rate for training '
-                                               'the blackbox model.')
+                                               'the black-box model.')
     flags.DEFINE_integer('nb_epochs', 10, 'Number of epochs to train the '
-                                          'blackbox model')
-    flags.DEFINE_integer('holdout', 150, 'Test set holdout for adversary')
-    flags.DEFINE_integer('data_aug', 6, 'Nb of substitute data augmentations')
-    flags.DEFINE_integer('nb_epochs_s', 10, 'Training epochs for substitute')
+                                          'blackbox model.')
+    flags.DEFINE_integer('holdout', 150, 'Test set holdout for adversary.')
+    flags.DEFINE_integer('data_aug', 6, 'Number of substitute data augmentations.')
+    flags.DEFINE_integer('nb_epochs_s', 10, 'Training epochs for substitute.')
     flags.DEFINE_float('lmbda', 0.1, 'Lambda from arxiv.org/abs/1602.02697')
-    flags.DEFINE_float('fgsm_eps', 0.3, 'FGSM epsilon')
+    flags.DEFINE_float('fgsm_eps', 0.3, 'FGSM epsilon.')
     flags.DEFINE_float('fgsm_eps_tr', 0.15, 'FGSM epsilon for adversarial '
                                             'training.')
     flags.DEFINE_string('rec_path', None, 'Path to Defense-GAN '
@@ -745,20 +746,17 @@ if __name__ == '__main__':
                                                 "[defense_gan|adv_tr|none]")
     flags.DEFINE_string("results_dir", None, "The path to results.")
     flags.DEFINE_boolean("train_on_recs", False,
-                         "Train the blackbox model on Defense-GAN "
+                         "Train the black-box model on Defense-GAN "
                          "reconstructions.")
     flags.DEFINE_integer('num_train', -1, 'Number of training samples for '
-                                          'the blackbox model.')
+                                          'the black-box model.')
     flags.DEFINE_string("bb_model", 'F',
-                        "The architecture of the blackbox model.")
+                        "The architecture of the classifier model.")
     flags.DEFINE_string("sub_model", 'E', "The architecture of the "
                                           "substitute model.")
     flags.DEFINE_string("debug_dir", None, "Directory for debug outputs.")
     flags.DEFINE_boolean("debug", None, "Directory for debug outputs.")
-    flags.DEFINE_boolean("override", None, "Overrides the test hyperparams")
-    flags.DEFINE_boolean("qual", False,
-                         "True for saving the dataset in a pickle file ["
-                         "False]")
+    flags.DEFINE_boolean("override", None, "Overrides the test hyperparams.")
 
     main_cfg = lambda x: main(cfg, x)
     tf.app.run(main=main_cfg)
