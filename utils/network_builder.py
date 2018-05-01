@@ -13,12 +13,11 @@
 # limitations under the License.
 # ==============================================================================
 
-"""
-Modified for Defense-GAN:
+"""Modified for Defense-GAN:
 - Added the ReconstructionLayer class for cleverhans.
 - The different model architectures that are tested in the paper.
 
-modified version of cleverhans/model.py
+Modified version of cleverhans/model.py
 
 """
 from __future__ import absolute_import
@@ -32,8 +31,6 @@ import keras.backend as K
 import numpy as np
 import tensorflow as tf
 
-
-# from cleverhans.model import Model
 
 class Model(object):
     """
@@ -184,7 +181,6 @@ class MLP(Model):
         rec_layer.set_input_shape(self.input_shape)
         self.layers = [rec_layer] + self.layers
         self.layer_names = ['reconstruction'] + self.layer_names
-        # self.x_rec = rec_layer.rec
 
 
 class Layer(object):
@@ -360,7 +356,7 @@ def model_e(input_shape=(None, 28, 28, 1), nb_classes=10):
     :return: tensorflow model
     """
 
-    # Define a fully connected model (it's different than the black-box)
+    # Define a fully connected model (it's different than the black-box).
     layers = [Flatten(),
               Linear(200),
               ReLU(),
