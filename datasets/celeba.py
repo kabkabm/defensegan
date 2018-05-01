@@ -44,6 +44,7 @@ class CelebA(Dataset):
         # The attribute represents which attribute to use in case of
         # classification.
         self.attribute = attribute
+        # Only gender classification is supported.
         self.attr_dict = {'gender': ['male']}
 
     def load(self, split='train', lazy=True, randomize=False):
