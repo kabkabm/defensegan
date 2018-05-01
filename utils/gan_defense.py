@@ -1,4 +1,4 @@
-# Copyright 2018 The DefenseGAN Authors. All Rights Reserved.
+# Copyright 2018 The Defense-GAN Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -88,7 +88,7 @@ def model_eval_gan(
             raise ValueError("Exactly one of model argument"
                              " and predictions argument should be specified.")
 
-    # Define accuracy symbolically
+    # Define accuracy symbolically.
     correct_preds = tf.equal(tf.argmax(labels, axis=-1),
                              tf.argmax(predictions, axis=-1))
 
@@ -97,7 +97,6 @@ def model_eval_gan(
                                      tf.argmax(predictions_rec, axis=-1))
         acc_value_rec = tf.reduce_sum(tf.to_float(correct_preds_rec))
 
-    # Init result var
     accuracy_rec = 0.0
     cur_labels = tf.argmax(labels, axis=-1),
     cur_preds = tf.argmax(predictions, axis=-1)
@@ -109,10 +108,9 @@ def model_eval_gan(
     all_labels = []
     preds = []
 
-    # Init result var
     accuracy = 0.0
 
-    # Compute number of batches
+    # Compute number of batches.
     nb_batches = int(math.ceil(float(len(test_images)) / args.batch_size))
     assert nb_batches * args.batch_size >= len(test_images)
 
@@ -129,7 +127,7 @@ def model_eval_gan(
         cur_batch_size = end - start
 
         # The last batch may be smaller than all others, so we need to
-        # account for variable batch size here
+        # account for variable batch size here.
         feed_dict = {images: test_images[start:end], labels: test_labels[start:end]}
         if feed is not None:
             feed_dict.update(feed)
@@ -165,7 +163,7 @@ def model_eval_gan(
 
     assert end >= len(test_images)
 
-        # Divide by number of examples to get final value
+    # Divide by number of examples to get final value.
     accuracy /= len(test_images)
     accuracy_rec /= len(test_images)
     preds = np.concatenate(preds)
@@ -178,4 +176,4 @@ def model_eval_gan(
     if predictions_rec is not None:
         return accuracy,accuracy_rec,roc_info
     else:
-        return accuracy,roc_info
+        return accuracy, roc_info
