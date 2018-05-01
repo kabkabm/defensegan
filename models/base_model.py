@@ -1,4 +1,4 @@
-# Copyright 2018 The DefenseGAN Authors. All Rights Reserved.
+# Copyright 2018 The Defense-GAN Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -40,13 +40,13 @@ class AbstractModel(object):
             args: The rest of the arguments which can become object attributes
         """
 
-        # set attributes either from FLAGS or **args
+        # Set attributes either from FLAGS or **args.
         self.cfg = cfg
 
-        # Active session parameter
+        # Active session parameter.
         self.active_sess = None
 
-        # Object attributes for
+        # Object attributes.
         default_properties.extend(
             ['tensorboard_log', 'output_dir', 'num_gpus'])
         self.default_properties = default_properties
@@ -62,13 +62,13 @@ class AbstractModel(object):
             else:
                 self._set_attr(attr, None)
 
-        # runtime attributes
+        # Runtime attributes.
         self.saver = None
         self.global_step = tf.train.get_or_create_global_step()
         self.global_step_inc = \
             tf.assign(self.global_step, tf.add(self.global_step, 1))
 
-        # Phase: 1 train 0 test
+        # Phase: 1 train 0 test.
         self.is_training = tf.placeholder(dtype=tf.bool)
         self.save_vars = {}
         self.save_var_prefixes = []
@@ -232,7 +232,7 @@ class AbstractModel(object):
         ensure_dir(self.debug_dir)
 
     def _initialize_summary_writer(self):
-        # Setup the summary writer
+        # Setup the summary writer.
         if not self.tensorboard_log:
             self.summary_writer = DummySummaryWriter()
         else:
@@ -292,12 +292,10 @@ class AbstractModel(object):
             self.active_sess.close()
 
     def load(self, checkpoint_dir=None, prefixes=None, saver=None):
-        """
-        Loading the saved weights to the model from the checkpoint directory
+        """Loads the saved weights to the model from the checkpoint directory
+        
+        Args:
             checkpoint_dir: The path to saved models
-
-        Returns:
-
         """
         if prefixes is None:
             prefixes = self.save_var_prefixes
@@ -337,7 +335,7 @@ class AbstractModel(object):
         return True
 
     def add_save_vars(self, prefixes):
-        """Preparing the list of variables that should be saved based on
+        """Prepares the list of variables that should be saved based on
         their name prefix.
 
         Args:
@@ -362,27 +360,23 @@ class AbstractModel(object):
         self.real_data_test = self.input_transform(self.real_data_test_pl)
 
     def initialize_uninitialized(self, ):
-        """
-        Only initializes the variables of a TensorFlow session that were not
+        """Only initializes the variables of a TensorFlow session that were not
         already initialized.
-
-        Returns:
-
         """
-        # List all global variables
+        # List all global variables.
         sess = self.sess
         global_vars = tf.global_variables()
 
-        # Find initialized status for all variables
+        # Find initialized status for all variables.
         is_var_init = [tf.is_variable_initialized(var) for var in global_vars]
         is_initialized = sess.run(is_var_init)
 
-        # List all variables that were not initialized previously
+        # List all variables that were not previously initialized.
         not_initialized_vars = [var for (var, init) in
                                 zip(global_vars, is_initialized) if not init]
         for v in not_initialized_vars:
             print('[!] not init: {}'.format(v.name))
-        # Initialize all uninitialized variables found, if any
+        # Initialize all uninitialized variables found, if any.
         if len(not_initialized_vars):
             sess.run(tf.variables_initializer(not_initialized_vars))
 
