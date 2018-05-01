@@ -43,7 +43,7 @@ def load_config(cfg_path, set_flag=False, verbose=False):
         verbose: Verbose mode.
 
     Returns:
-        A the loaded configuration dictionary.
+        The loaded configuration dictionary.
 
     Raises:
         RuntimeError: If the configuration path does not exist.
