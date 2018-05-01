@@ -1,4 +1,4 @@
-# Copyright 2018 The DefenseGAN Authors. All Rights Reserved.
+# Copyright 2018 The Defense-GAN Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -51,8 +51,7 @@ class DefenseGANBase(AbstractModel):
         self.batch_size = 32  # Batch size for training the GAN.
         self.use_bn = True  # Use batchnorm in the discriminator and generator.
         self.test_batch_size = 20  # Batch size for test time.
-        self.mode = 'gp-wgan'  # The mode of training the GAN (default:
-        # gp-wgan).
+        self.mode = 'gp-wgan'  # The mode of training the GAN (default: gp-wgan).
         self.gradient_penalty_lambda = 10.0  # Gradient penalty scale.
         self.train_iters = 30000  # Number of training iterations.
         self.critic_iters = 5  # Critic iterations per training step.
@@ -60,13 +59,12 @@ class DefenseGANBase(AbstractModel):
         self.net_dim = None  # The complexity of network per layer.
         self.input_transform_type = 0  # The normalization used for the inputs.
         self.debug = False  # Debug info will be printed.
-        self.rec_iters = 200  # number of reconstruction iterations.
-        self.image_dim = [None, None, None]  # [H, W, C] of the output image.
-        self.rec_rr = 10  # number of random restarts for the reconstruction
+        self.rec_iters = 200  # Number of reconstruction iterations.
+        self.image_dim = [None, None, None]  # [height, width, number of channels] of the output image.
+        self.rec_rr = 10  # Number of random restarts for the reconstruction
 
-        # step.
         self.rec_lr = 10.0  # The reconstruction learning rate.
-        self.test_again = False  # Do not use the cached info for test phase.
+        self.test_again = False  # If true, do not use the cached info for test phase.
         self.attribute = 'gender'
 
         # Should be implemented in the child classes.
@@ -299,7 +297,7 @@ class DefenseGANBase(AbstractModel):
             tflib.plot.plot('{}/time'.format(self.debug_dir),
                             time.time() - start_time)
 
-            # Calculate dev loss and generate samples every 100 iters
+            # Calculate dev loss and generate samples every 100 iters.
             if iteration % 100 == 5:
                 dev_disc_costs = []
                 dev_ctr = 0
@@ -335,7 +333,7 @@ class DefenseGANBase(AbstractModel):
     def reconstruct(
         self, images, batch_size=None, back_prop=True,
         reconstructor_id=0, z_init_val=None):
-        """Creates the reconstruction op for DefenseGAN.
+        """Creates the reconstruction op for Defense-GAN.
 
         Args:
             X: Input tensor
@@ -345,7 +343,7 @@ class DefenseGANBase(AbstractModel):
         """
 
         # Batch size is needed because the latent codes are `tf.Variable`s and
-        # Need to be built into TF's static graph beforehand.
+        # need to be built into TF's static graph beforehand.
 
         batch_size = batch_size if batch_size else self.test_batch_size
 
@@ -398,7 +396,6 @@ class DefenseGANBase(AbstractModel):
         if z_init_val is not None:
             init_z = tf.assign(z_hat, z_init_val)
 
-        # Generated
         z_hats_recs = self.generator_fn(z_hat, is_training=False)
         num_dim = len(z_hats_recs.get_shape())
         axes = range(1, num_dim)
@@ -408,8 +405,6 @@ class DefenseGANBase(AbstractModel):
             axis=axes)
         rec_loss = tf.reduce_sum(image_rec_loss)
         rec_online_optimizer.minimize(rec_loss, var_list=[z_hat])
-
-        # self.initialize_uninitialized()
 
         def rec_body(i, *args):
             z_hats_recs = self.generator_fn(z_hat, is_training=False)
@@ -506,7 +501,7 @@ class DefenseGANBase(AbstractModel):
             ctr = 0
             sti = time.time()
 
-            # Pickle files per reconstructed image
+            # Pickle files per reconstructed image.
             pickle_out_dir = os.path.join(output_dir, 'pickles')
             ensure_dir(pickle_out_dir)
             single_feat_path_template = os.path.join(pickle_out_dir,
@@ -592,7 +587,7 @@ class DefenseGANBase(AbstractModel):
         return rets
 
     def generate_image(self, iteration=None):
-        """Generates a fixed noise for visualization of generation output
+        """Generates a fixed noise for visualization of generation output.
         """
         pass
 
@@ -608,7 +603,7 @@ class DefenseGANBase(AbstractModel):
 
     def save_ds(self):
         """Reconstructs the images of the config's dataset with the
-        generator"""
+        generator."""
         if self.dataset_name == 'cifar':
             splits = ['train', 'dev']
         else:
