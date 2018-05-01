@@ -69,11 +69,11 @@ ln -s <path-to-debug> debug
 python train.py --cfg <path> --is_train <extra-args>
 ```
 - `--cfg` This can be set to either a `.yml` configuration file like the ones in
-`experiments/configs`, or an output directory path.
+`experiments/cfgs`, or an output directory path.
 - `<extra-args>` can be any parameter that is defined in the config file.
 
 The training will create a directory in the `output` directory per experiment
-with the same name as <configs> to save the model checkpoints. If
+with the same name as <cfgs> to save the model checkpoints. If
 `<extra-args>` are different from the ones that are defined in `<config>`,
 the output directory name will reflect the difference.
 
@@ -84,14 +84,14 @@ loaded if `<path>` is the address to that directory.
 
 After running
 ```
-python train.py --cfg experiments/configs/gans/mnist.yml --is_train
+python train.py --cfg experiments/cfgs/gans/mnist.yml --is_train
 ```
 `output/gans/mnist` will be created.
 
 ####  [optional] Save reconstructions and datasets into cache:
 ```
-python train.py --cfg experiments/configs/<config> --save_recs
-python train.py --cfg experiments/configs/<config> --save_ds
+python train.py --cfg experiments/cfgs/<config> --save_recs
+python train.py --cfg experiments/cfgs/<config> --save_ds
 ```
 
 #### Example
