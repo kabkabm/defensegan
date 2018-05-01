@@ -47,7 +47,7 @@ Note: if you don't have a GPU install the cpu version of TensorFlow 1.7.
 
 3. Download the dataset and prepare `data` directory:
 ```
-python download_dataset.py [mnist|fmnist|celeba]
+python download_dataset.py [mnist|f-mnist|celeba]
 ```
 
 4. Create or link `output` and `debug` directories:
