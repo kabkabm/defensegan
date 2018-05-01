@@ -1,6 +1,7 @@
 # Defense-GAN: Protecting Classifiers Against Adversarial Attacks Using Generative Models
 
-Pouya Samangouei*, Maya Kabkab*, Rama Chellappa [*: authors contributed equally]
+Pouya Samangouei*, Maya Kabkab*, Rama Chellappa
+[*: authors contributed equally]
 
 This repository contains the implementation of our ICLR-18 paper:
 [**Defense-GAN: Protecting Classifiers Against Adversarial Attacks Using Generative Models**](https://openreview.net/pdf?id=BkJ3ibb0-)
