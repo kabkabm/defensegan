@@ -18,7 +18,7 @@ from tqdm import tqdm
 from six.moves import urllib
 
 parser = argparse.ArgumentParser(description='Download dataset for DCGAN.')
-parser.add_argument('datasets', metavar='N', type=str, nargs='+', choices=['celebA', 'lsun', 'mnist','fmnist'],
+parser.add_argument('datasets', metavar='N', type=str, nargs='+', choices=['celebA', 'lsun', 'mnist','f-mnist'],
            help='name of dataset to download [celebA, lsun, mnist, fmnist]')
 
 def download(url, dirpath):
@@ -162,7 +162,7 @@ def download_mnist(dirpath):
 
 
 def download_fmnist(dirpath):
-  data_dir = os.path.join(dirpath, 'fmnist')
+  data_dir = os.path.join(dirpath, 'f-mnist')
   if os.path.exists(data_dir):
     print('Found F-MNIST - skip')
     return
