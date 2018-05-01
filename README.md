@@ -195,7 +195,7 @@ also a list of flags in `whitebox.py`. The most important ones are:
     to a small value.
 - Refer to `whitebox.py` for more flag descriptions.
 
-### Example
+#### Example
 
 First row of Table 4:
 ```
