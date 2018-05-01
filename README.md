@@ -62,9 +62,9 @@ ln -s <path-to-debug> debug
 ```
 
 
-# Usage
+## Usage
 
-## Train a GAN model
+### Train a GAN model
 ```
 python main.py --cfg <path> --is_train <extra-args>
 ```
@@ -80,7 +80,7 @@ the output directory name will reflect the difference.
 A config file is saved into each experiment directory so that they can be
 loaded if `<path>` is the address to that directory.
 
-- Example:
+#### Example
 
 After running
 ```
@@ -88,13 +88,13 @@ python main.py --cfg experiments/configs/gans/mnist.yml --is_train
 ```
 `output/gans/mnist` will be created.
 
-###  [optional] Save reconstructions and datasets into cache:
+####  [optional] Save reconstructions and datasets into cache:
 ```
 python main.py --cfg experiments/configs/<config> --save_recs
 python main.py --cfg experiments/configs/<config> --save_ds
 ```
 
-### Example:
+#### Example
 After running the training code for `mnist`, the reconstructions and the
 dataset can be saved with:
 ```
@@ -104,7 +104,7 @@ python main.py --cfg output/gans/mnist --save_ds
 
 As training goes on, sample outputs of the generator are written to `debug/gans/<model_config>`.
 
-## Black-box attacks
+### Black-box attacks
 
 To perform black-box experiments run `blackbox.py` [Table 1 and 2 of the
 paper]:
@@ -148,7 +148,7 @@ also a list of flags in `blackbox.py`. The most important ones are:
 
 - Refer to `blackbox.py` for more flag descriptions.
 
-### Example
+#### Example
 
 - Row 1 of Table 1 `Defense-GAN-Orig`:
 ```
@@ -161,7 +161,7 @@ python blackbox.py --cfg output/gans/mnist \
 ```
 - If you set `--nb_epochs 1 --nb_epochs_s 1 --data_aug 1` you will get a quick glance of how the script works.
 
-## White-box attacks
+### White-box attacks
 
 To test Defense-GAN for white-box attacks run `whitebox.py` [Tables 4, 5, 12
 of the paper]:
