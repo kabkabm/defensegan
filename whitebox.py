@@ -13,7 +13,7 @@
 # limitations under the License.
 # ==============================================================================
 
-"""Testing whitebox attacks Defense-GAN models. This module is based on MNIST
+"""Testing white-box attacks Defense-GAN models. This module is based on MNIST
 tutorial of cleverhans."""
 
 from __future__ import absolute_import
@@ -63,30 +63,28 @@ def whitebox(gan, rec_data_path=None, batch_size=128, learning_rate=0.001,
          gan: A `GAN` model.
          rec_data_path: A string to the directory.
          batch_size: The size of the batch.
-         learning_rate: The learning rate of training the target models.
+         learning_rate: The learning rate for training the target models.
          nb_epochs: Number of epochs for training the target model.
          eps: The epsilon of FGSM.
-         online_training: Training DefenseGAN with online reconstruction. The
-            faster less accurate way is to reconstruct the dataset once and use
+         online_training: Training Defense-GAN with online reconstruction. The
+            faster but less accurate way is to reconstruct the dataset once and use
             it to train the target models with:
             `python train.py --cfg <path-to-model> --save_recs`
-         attack_type: Type of the whitebox attack. It can be `fgsm`,
+         attack_type: Type of the white-box attack. It can be `fgsm`,
             `rand+fgsm`, or `cw`.
-         defense_type: String representing the type of attack. Can be `none` or
-            `defense_gan`.
-
-    Returns:
-        A dictionary:
+         defense_type: String representing the type of attack. Can be `none`,
+            `defense_gan`, or `adv_tr`.
     """
+    
     FLAGS = tf.flags.FLAGS
 
-    # Set logging level to see debug information
+    # Set logging level to see debug information.
     set_log_level(logging.WARNING)
 
     if defense_type == 'defense_gan':
         assert gan is not None
 
-    # Create TF session
+    # Create TF session.
     if defense_type == 'defense_gan':
         sess = gan.sess
         if FLAGS.train_on_recs:
@@ -118,7 +116,7 @@ def whitebox(gan, rec_data_path=None, batch_size=128, learning_rate=0.001,
         train_images = train_images[:num_train]
         train_labels = train_labels[:num_train]
 
-    # GAN defense flag
+    # GAN defense flag.
     models = {'A': model_a, 'B': model_b, 'C': model_c, 'D': model_d, 'E': model_e, 'F': model_f}
     model = models[FLAGS.model](input_shape=x_shape, nb_classes=train_labels.shape[1])
 
@@ -127,7 +125,7 @@ def whitebox(gan, rec_data_path=None, batch_size=128, learning_rate=0.001,
 
     def evaluate():
         # Evaluate the accuracy of the MNIST model on legitimate test
-        # examples
+        # examples.
         eval_params = {'batch_size': batch_size}
         acc = model_eval(
             sess, images_pl, labels_pl, preds, rec_test_images,
@@ -164,7 +162,7 @@ def whitebox(gan, rec_data_path=None, batch_size=128, learning_rate=0.001,
                 init_all=False, feed={K.learning_phase(): 1},
                 evaluate=evaluate)
 
-    # Calculate training error
+    # Calculate training error.
     eval_params = {'batch_size': batch_size}
     acc = model_eval(
         sess, images_pl, labels_pl, preds, train_images, train_labels,
@@ -173,10 +171,9 @@ def whitebox(gan, rec_data_path=None, batch_size=128, learning_rate=0.001,
     print('[#] Accuracy on clean examples {}'.format(acc))
     if attack_type is None:
         return acc, 0, None
-        return
-    # report.train_clean_train_clean_eval = acc
+
     # Initialize the Fast Gradient Sign Method (FGSM) attack object and
-    # graph
+    # graph.
 
     if FLAGS.defense_type == 'defense_gan':
         z_init_val = None
@@ -250,7 +247,7 @@ def main(cfg, argv=None):
     if FLAGS.defense_type.lower() != 'none':
         if FLAGS.rec_path and FLAGS.defense_type == 'defense_gan':
 
-            # extract hyper parameters from reconstruction path.
+            # Extract hyperparameters from reconstruction path.
             if FLAGS.rec_path:
                 train_param_re = re.compile('recs_rr(.*)_lr(.*)_iters(.*)')
                 [tr_rr, tr_lr, tr_iters] = \
@@ -266,10 +263,10 @@ def main(cfg, argv=None):
         gan.rec_lr = float(tr_lr)
         gan.rec_iters = int(tr_iters)
 
-    # Setting the reuslts directory
+    # Setting the results directory.
     results_dir, result_file_name = _get_results_dir_filename(gan)
 
-    # Result file name. The counter makes sure we are not overwriting the
+    # Result file name. The counter ensures we are not overwriting the
     # results.
     counter = 0
     temp_fp = str(counter) + '_' + result_file_name
@@ -362,40 +359,40 @@ if __name__ == '__main__':
     args = parse_args()
 
     # Note: The load_config() call will convert all the parameters that are defined in
-    # experiments/config files into FLAGS.param_name and can be passed in from command line
+    # experiments/config files into FLAGS.param_name and can be passed in from command line.
     # arguments : python whitebox.py --cfg <config_path> --<param_name> <param_value>
     cfg = load_config(args.cfg)
     flags = tf.app.flags
 
-    flags.DEFINE_integer('nb_classes', 10, 'Number of classes in problem')
-    flags.DEFINE_float('learning_rate', 0.001, 'Learning rate for training')
-    flags.DEFINE_integer('nb_epochs', 10, 'Number of epochs to train model')
-    flags.DEFINE_float('lmbda', 0.1, 'Lambda from arxiv.org/abs/1602.02697')
-    flags.DEFINE_float('fgsm_eps', 0.3, 'FGSM epsilon')
-    flags.DEFINE_string('rec_path', None, 'Path to reconstructions')
-    flags.DEFINE_integer('num_tests', -1, 'Number of test samples')
+    flags.DEFINE_integer('nb_classes', 10, 'Number of classes.')
+    flags.DEFINE_float('learning_rate', 0.001, 'Learning rate for training.')
+    flags.DEFINE_integer('nb_epochs', 10, 'Number of epochs to train model.')
+    flags.DEFINE_float('lmbda', 0.1, 'Lambda from arxiv.org/abs/1602.02697.')
+    flags.DEFINE_float('fgsm_eps', 0.3, 'FGSM epsilon.')
+    flags.DEFINE_string('rec_path', None, 'Path to reconstructions.')
+    flags.DEFINE_integer('num_tests', -1, 'Number of test samples.')
     flags.DEFINE_integer('random_test_iter', -1,
-                         'Number of random sampling for testing the classifier')
+                         'Number of random sampling for testing the classifier.')
     flags.DEFINE_boolean("online_training", False,
-                         "Train the base classifier based on reconstructions")
+                         "Train the base classifier on reconstructions.")
     flags.DEFINE_boolean("show_data", False, "Train the base classifier based on reconstructions")
-    flags.DEFINE_string("defense_type", "none", "Type of defense [gan|ensemble]")
-    flags.DEFINE_string("attack_type", "none", "Type of defense [fgsm|cw|jsma]")
-    flags.DEFINE_string("results_dir", None, "The final subdirectory of the results")
+    flags.DEFINE_string("defense_type", "none", "Type of defense [none|defense_gan|adv_tr]")
+    flags.DEFINE_string("attack_type", "none", "Type of attack [fgsm|cw|rand_fgsm]")
+    flags.DEFINE_string("results_dir", None, "The final subdirectory of the results.")
     flags.DEFINE_boolean("same_as_train", False,
-                         "Use the same parameteres as train reconstructions")
-    flags.DEFINE_boolean("same_init", False, "Same initialization for z_hats")
-    flags.DEFINE_boolean("just_one", False, "Just test one time")
-    flags.DEFINE_string("model", "F", "The model for training")
-    flags.DEFINE_string("debug_dir", "temp", "The model for training")
-    flags.DEFINE_integer('num_train', -1, 'Number of training data to load')
+                         "Use the same parameteres as train reconstructions.")
+    flags.DEFINE_boolean("same_init", False, "Same initialization for z_hats.")
+    flags.DEFINE_boolean("just_one", False, "Just test one time.")
+    flags.DEFINE_string("model", "F", "The classifier model.")
+    flags.DEFINE_string("debug_dir", "temp", "The debug directory.")
+    flags.DEFINE_integer("num_train", -1, 'Number of training data to load.')
     flags.DEFINE_boolean("debug", False, "True for saving reconstructions [False]")
     flags.DEFINE_boolean("override", False, "Overriding the config values of reconstruction "
                                             "hyperparameters. It has to be true if either "
                                             "`--rec_rr`, `--rec_lr`, or `--rec_iters` is passed "
                                             "from command line.")
     flags.DEFINE_boolean("train_on_recs", False,
-                         "Train the blackbox model on the reconstructed samples "
+                         "Train the classifier on the reconstructed samples "
                          "using Defense-GAN.")
 
     main_cfg = lambda x: main(cfg, x)
