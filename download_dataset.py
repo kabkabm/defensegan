@@ -1,5 +1,4 @@
-"""
-Modification of https://github.com/stanfordnlp/treelstm/blob/master/scripts/download.py
+"""Modification of https://github.com/stanfordnlp/treelstm/blob/master/scripts/download.py
 
 Downloads the following:
 - Celeb-A dataset
@@ -131,7 +130,6 @@ def download_lsun(dirpath):
     os.mkdir(data_dir)
 
   tag = 'latest'
-  #categories = _list_categories(tag)
   categories = ['bedroom']
 
   for category in categories:
