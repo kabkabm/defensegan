@@ -375,14 +375,10 @@ if __name__ == '__main__':
                          'Number of random sampling for testing the classifier.')
     flags.DEFINE_boolean("online_training", False,
                          "Train the base classifier on reconstructions.")
-    flags.DEFINE_boolean("show_data", False, "Train the base classifier based on reconstructions")
     flags.DEFINE_string("defense_type", "none", "Type of defense [none|defense_gan|adv_tr]")
     flags.DEFINE_string("attack_type", "none", "Type of attack [fgsm|cw|rand_fgsm]")
     flags.DEFINE_string("results_dir", None, "The final subdirectory of the results.")
-    flags.DEFINE_boolean("same_as_train", False,
-                         "Use the same parameteres as train reconstructions.")
     flags.DEFINE_boolean("same_init", False, "Same initialization for z_hats.")
-    flags.DEFINE_boolean("just_one", False, "Just test one time.")
     flags.DEFINE_string("model", "F", "The classifier model.")
     flags.DEFINE_string("debug_dir", "temp", "The debug directory.")
     flags.DEFINE_integer("num_train", -1, 'Number of training data to load.')
