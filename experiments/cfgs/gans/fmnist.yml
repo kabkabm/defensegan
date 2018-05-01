@@ -1,5 +1,5 @@
-DATASET_NAME: 'f-mnist'
-ARCH_TYPE: 'f-mnist'
+DATASET_NAME: 'fmnist'
+ARCH_TYPE: 'fmnist'
 MODE: 'wgan-gp'
 CRITIC_ITERS: 5
 REC_ITERS: 200

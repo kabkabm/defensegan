@@ -66,7 +66,7 @@ ln -s <path-to-debug> debug
 
 ### Train a GAN model
 ```
-python main.py --cfg <path> --is_train <extra-args>
+python train.py --cfg <path> --is_train <extra-args>
 ```
 - `--cfg` This can be set to either a `.yml` configuration file like the ones in
 `experiments/configs`, or an output directory path.
@@ -84,22 +84,22 @@ loaded if `<path>` is the address to that directory.
 
 After running
 ```
-python main.py --cfg experiments/configs/gans/mnist.yml --is_train
+python train.py --cfg experiments/configs/gans/mnist.yml --is_train
 ```
 `output/gans/mnist` will be created.
 
 ####  [optional] Save reconstructions and datasets into cache:
 ```
-python main.py --cfg experiments/configs/<config> --save_recs
-python main.py --cfg experiments/configs/<config> --save_ds
+python train.py --cfg experiments/configs/<config> --save_recs
+python train.py --cfg experiments/configs/<config> --save_ds
 ```
 
 #### Example
 After running the training code for `mnist`, the reconstructions and the
 dataset can be saved with:
 ```
-python main.py --cfg output/gans/mnist --save_recs
-python main.py --cfg output/gans/mnist --save_ds
+python train.py --cfg output/gans/mnist --save_recs
+python train.py --cfg output/gans/mnist --save_ds
 ```
 
 As training goes on, sample outputs of the generator are written to `debug/gans/<model_config>`.
