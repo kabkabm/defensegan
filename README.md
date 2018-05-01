@@ -1,15 +1,17 @@
-Defense-GAN: Protecting Classifiers Against Adversarial Attacks Using Generative Models
-======================================================
-Pouya Samangouei*, Maya Kabkab*, Rama Chellappa
+# Defense-GAN: Protecting Classifiers Against Adversarial Attacks Using Generative Models
 
-[*] authors contributed equally
+Pouya Samangouei*, Maya Kabkab*, Rama Chellappa [*: authors contributed equally]
+
+This repository contains the implementation of our ICLR-18 paper:
+[**Defense-GAN: Protecting Classifiers Against Adversarial Attacks Using Generative Models**](https://openreview.net/pdf?id=BkJ3ibb0-)
+
+If you find this code or the paper useful, please consider citing:
 
 ```
 @inproceedings{defensegan,
   title={Defense-GAN: Protecting classifiers against adversarial attacks using generative models},
   author={Samangouei, Pouya and Kabkab, Maya and Chellappa, Rama},
   booktitle={International Conference on Learning Representations},
-  volume={9},
   year={2018}
 }
 ```
@@ -17,7 +19,17 @@ Pouya Samangouei*, Maya Kabkab*, Rama Chellappa
 ![alt text](figures/defensegan.png "The Overview of the Defense-GAN Algorithm")
 ![alt text](figures/defensegan_gd.png "The gradient descent steps at inferece time.")
 
-### Installation
+
+## Contents
+
+1. [Installation](#installation)
+2. [Usage](#usage)
+    - [Train a GAN model](#train-a-gan-model)
+    - [Black-box attacks](#black-box-attacks)
+    - [White-box attacks](#white-box-attacks)
+
+
+## Installation
 1. Clone this repository:
 ```
 git clone --recursive https://github.com/kabkabm/defensegan
@@ -48,9 +60,9 @@ ln -s <path-to-debug> debug
 ```
 
 
-# Workflow
+# Usage
 
-### Train a GAN model:
+## Train a GAN model
 ```
 python main.py --cfg <path> --is_train <extra-args>
 ```
@@ -74,13 +86,13 @@ python main.py --cfg experiments/configs/gans/mnist.yml --is_train
 ```
 `output/gans/mnist` will be created.
 
-###  (optional) Save reconstructions and datasets into cache:
+###  [optional] Save reconstructions and datasets into cache:
 ```
 python main.py --cfg experiments/configs/<config> --save_recs
 python main.py --cfg experiments/configs/<config> --save_ds
 ```
 
-- Example:
+### Example:
 After running the training code for `mnist`, the reconstructions and the
 dataset can be saved with:
 ```
@@ -90,7 +102,7 @@ python main.py --cfg output/gans/mnist --save_ds
 
 As training goes on, sample outputs of the generator are written to `debug/gans/<model_config>`.
 
-### Black-box
+## Black-box attacks
 
 To perform black-box experiments run `blackbox.py` [Table 1 and 2 of the
 paper]:
@@ -134,7 +146,7 @@ also a list of flags in `blackbox.py`. The most important ones are:
 
 - Refer to `blackbox.py` for more flag descriptions.
 
-Example:
+### Example
 
 - Row 1 of Table 1 `Defense-GAN-Orig`:
 ```
@@ -147,7 +159,7 @@ python blackbox.py --cfg output/gans/mnist \
 ```
 - If you set `--nb_epochs 1 --nb_epochs_s 1 --data_aug 1` you will get a quick glance of how the script works.
 
-### White-box
+## White-box attacks
 
 To test Defense-GAN for white-box attacks run `whitebox.py` [Tables 4, 5, 12
 of the paper]:
@@ -181,7 +193,7 @@ also a list of flags in `whitebox.py`. The most important ones are:
     to a small value.
 - Refer to `whitebox.py` for more flag descriptions.
 
-Example:
+### Example
 
 First row of Table 4:
 ```
