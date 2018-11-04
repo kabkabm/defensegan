@@ -169,7 +169,7 @@ class LazyDataset(object):
 
     @property
     def shape(self):
-        return [None] + self._get_image(self.filepaths[0]).shape
+        return [None] + list(self._get_image(self.filepaths[0]).shape)
 
 
 class PickleLazyDataset(LazyDataset):
