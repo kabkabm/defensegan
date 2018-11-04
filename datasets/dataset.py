@@ -167,6 +167,10 @@ class LazyDataset(object):
         else:
             raise TypeError("Index must be an integer or a slice.")
 
+    @property
+    def shape(self):
+        return [None] + self._get_image(self.filepaths[0]).shape
+
 
 class PickleLazyDataset(LazyDataset):
     """This dataset is a lazy dataset for working with saved pickle files
