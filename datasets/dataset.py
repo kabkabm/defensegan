@@ -148,7 +148,13 @@ class LazyDataset(object):
             return np.array(
                 [self._get_image(self.filepaths[i]) for i in index])
         else:
-            raise TypeError("Index must be an integer or a slice.")
+            try:
+                inds = [int(i) for i in index]
+                return np.array(
+                    [self._get_image(self.filepaths[i]) for i in inds]
+                )
+            except TypeError:
+                raise TypeError("Index must be an integer or a slice.")
 
     def get_subset(self, indices):
         """Gets a subset of the images
