@@ -155,7 +155,7 @@ class LazyDataset(object):
                     [self._get_image(self.filepaths[i]) for i in inds]
                 )
             except TypeError:
-                raise TypeError("Index must be an integer, a slice, or an Iterable object.")
+                raise TypeError("Index must be an integer, a slice, a container or an integer generator.")
 
     def get_subset(self, indices):
         """Gets a subset of the images
