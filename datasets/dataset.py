@@ -178,6 +178,10 @@ class LazyDataset(object):
     def shape(self):
         return tuple([None] + list(self._get_image(self.filepaths[0]).shape))
 
+    @property
+    def dtype(self):
+        return self._get_image(self.filepaths[0]).dtype
+
 
 class PickleLazyDataset(LazyDataset):
     """This dataset is a lazy dataset for working with saved pickle files
