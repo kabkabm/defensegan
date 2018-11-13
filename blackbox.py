@@ -236,13 +236,13 @@ def get_celeba(data_path, test_on_dev=True, orig_data=False):
         images: Images of the dataset.
         labels: Labels of the loaded images.
     """
-    dev_name = 'dev'
+    dev_name = 'val'
     if not test_on_dev:
         dev_name = 'test'
     ds = CelebA(attribute=FLAGS.attribute)
     ds.load()
     ds_test = CelebA(attribute=FLAGS.attribute)
-    ds_test.load(split=dev_name, transform_type=1)
+    ds_test.load(split=dev_name)
     train_labels = ds.labels
     test_labels = ds_test.labels
 

@@ -137,7 +137,7 @@ class LazyDataset(object):
         if isinstance(index, int):
             return self._get_image(self.filepaths[index])
         # Case of a slice or array of indices.
-        elif isinstance(index, slice) or isinstance(index, np.ndarray):
+        elif isinstance(index, slice):
             if isinstance(index, slice):
                 if index.start is None:
                     index = range(index.stop)
@@ -146,9 +146,16 @@ class LazyDataset(object):
                 else:
                     index = range(index.start, index.stop, index.step)
             return np.array(
-                [self._get_image(self.filepaths[i]) for i in index])
+                [self._get_image(self.filepaths[i]) for i in index]
+            )
         else:
-            raise TypeError("Index must be an integer or a slice.")
+            try:
+                inds = [int(i) for i in index]
+                return np.array(
+                    [self._get_image(self.filepaths[i]) for i in inds]
+                )
+            except TypeError:
+                raise TypeError("Index must be an integer, a slice, a container or an integer generator.")
 
     def get_subset(self, indices):
         """Gets a subset of the images
@@ -166,6 +173,14 @@ class LazyDataset(object):
             self.filepaths = [self.filepaths[i] for i in indices]
         else:
             raise TypeError("Index must be an integer or a slice.")
+
+    @property
+    def shape(self):
+        return tuple([None] + list(self._get_image(self.filepaths[0]).shape))
+
+    @property
+    def dtype(self):
+        return self._get_image(self.filepaths[0]).dtype
 
 
 class PickleLazyDataset(LazyDataset):
